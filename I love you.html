@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রিমিয়াম ব্ল্যাক ভিডিও প্লেয়ার</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            background: #141414;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid #222;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000;
+        }
+
+        /* কাস্টম কন্ট্রোল বার */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.6));
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* মোবাইল রেসপন্সিভনেস এবং টাচ ডিভাইসের জন্য কন্ট্রোল সবসময় দৃশ্যমান রাখার ব্যবস্থা */
+        @media (max-width: 768px) {
+            .controls {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <!-- ইন্টারনেট ছাড়া চালানোর জন্য src-এ ভিডিওর Base64 কোড দিতে হবে -->
+        <video id="myVideo" playsinline>
+            <source src="data:video/mp4;base64,YOUR_BASE64_VIDEO_STRING_HERE" type="video/mp4">
+            আপনার ব্রাউজার ভিডিও ট্যাগ সমর্থন করে না।
+        </video>
+
+        <div class="controls">
+            <button class="control-btn" id="playPauseBtn">প্লে</button>
+            <button class="control-btn" id="fullscreenBtn">ফুলস্ক্রিন</button>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('myVideo');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // প্লে / পজ ফাংশনালিটি
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = 'পজ';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = 'প্লে';
+            }
+        });
+
+        video.addEventListener('ended', () => {
+            playPauseBtn.textContent = 'প্লে';
+        });
+
+        // ফুলস্ক্রিন ফাংশনালিটি
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) { /* Safari */
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) { /* IE/Edge */
+                    video.msRequestFullscreen();
+                }
+                fullscreenBtn.textContent = 'নরমাল স্ক্রিন';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                fullscreenBtn.textContent = 'ফুলস্ক্রিন';
+            }
+        });
+    </script>
+
+</body>
+</html>
